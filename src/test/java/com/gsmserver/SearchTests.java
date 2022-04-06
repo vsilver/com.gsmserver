@@ -1,20 +1,40 @@
 package com.gsmserver;
 
+import com.codeborne.selenide.Configuration;
 import com.codeborne.selenide.Selectors;
 import com.codeborne.selenide.SelenideElement;
+import com.codeborne.selenide.junit5.TextReportExtension;
+import com.codeborne.selenide.logevents.SelenideLogger;
+import io.qameta.allure.selenide.AllureSelenide;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.openqa.selenium.By;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.api.extension.RegisterExtension;
+import io.qameta.allure.selenide.AllureSelenide;
 
 import static com.codeborne.selenide.CollectionCondition.size;
 import static com.codeborne.selenide.Condition.text;
 import static com.codeborne.selenide.Selenide.*;
 
+
+@ExtendWith({TextReportExtension.class})
 public class SearchTests {
 
+    @RegisterExtension
+    TextReportExtension textReportExtension = new TextReportExtension();
+
+    @BeforeAll
+    public static void setUpAll() {
+        Configuration.browserSize = "1280x800";
+        //SelenideLogger.addListener("allure", new AllureSelenide());
+        SelenideLogger.addListener("AllureSelenide", new AllureSelenide().screenshots(true).savePageSource(true));
+    }
+
+
     @BeforeEach
-    void  openHomePage(){
+    void openHomePage() {
         open("https://gsmserver.com/");
     }
 
@@ -39,11 +59,11 @@ public class SearchTests {
     }
 
     @Test
-    void searchProductByTitleTest(){
+    void searchProductByTitleTest() {
 
         var productName = "Z3X Box Pro Samsung Activated Golden Edition without Cable Set";
 
-        new  HomePage().searchFor(productName);
+        new HomePage().searchFor(productName);
         var actualSearchResultTitle = new SearchResultPage().getSearchResultTitle();
 
         Assertions.assertEquals(productName, actualSearchResultTitle);
@@ -53,4 +73,7 @@ public class SearchTests {
     private SelenideElement findProductID(String productID) {
         return $(Selectors.by("key", productID));
     }
+
+    //@AfterEach
+
 }

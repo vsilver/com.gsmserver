@@ -1,5 +1,7 @@
 plugins {
     id 'java'
+    id 'io.qameta.allure' version "2.8.1"
+
 }
 
 group 'org.example'
@@ -13,12 +15,15 @@ repositories {
 
 ext {
     junit5Ver = "5.8.2"
+    allureVer = "2.13.2"
 }
 
 dependencies {
     testImplementation("org.junit.jupiter:junit-jupiter:$junit5Ver")
-    implementation("com.codeborne:selenide:6.3.5")
     testRuntimeOnly("org.junit.vintage:junit-vintage-engine:$junit5Ver")
+    testRuntimeOnly 'org.slf4j:slf4j-simple:1.7.30'
+    implementation("com.codeborne:selenide:6.3.5")
+    implementation("io.qameta.allure:allure-selenide:2.13.6")
 }
 
 test {
