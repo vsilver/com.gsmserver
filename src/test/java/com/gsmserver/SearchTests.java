@@ -1,18 +1,20 @@
 package com.gsmserver;
 
 import com.codeborne.selenide.Configuration;
+import com.codeborne.selenide.Screenshots;
 import com.codeborne.selenide.Selectors;
 import com.codeborne.selenide.SelenideElement;
 import com.codeborne.selenide.junit5.TextReportExtension;
 import com.codeborne.selenide.logevents.SelenideLogger;
+import com.google.common.io.Files;
+import io.qameta.allure.Attachment;
 import io.qameta.allure.selenide.AllureSelenide;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.api.extension.RegisterExtension;
-import io.qameta.allure.selenide.AllureSelenide;
+
+import java.io.File;
+import java.io.IOException;
 
 import static com.codeborne.selenide.CollectionCondition.size;
 import static com.codeborne.selenide.Condition.text;
@@ -28,7 +30,6 @@ public class SearchTests {
     @BeforeAll
     public static void setUpAll() {
         Configuration.browserSize = "1280x800";
-        //SelenideLogger.addListener("allure", new AllureSelenide());
         SelenideLogger.addListener("AllureSelenide", new AllureSelenide().screenshots(true).savePageSource(true));
     }
 
@@ -65,8 +66,9 @@ public class SearchTests {
 
         new HomePage().searchFor(productName);
         var actualSearchResultTitle = new SearchResultPage().getSearchResultTitle();
+        String actualSearchResultTitleCut = actualSearchResultTitle.substring(8, 70);
 
-        Assertions.assertEquals(productName, actualSearchResultTitle);
+        Assertions.assertEquals(productName, actualSearchResultTitleCut);
 
     }
 
@@ -74,6 +76,15 @@ public class SearchTests {
         return $(Selectors.by("key", productID));
     }
 
-    //@AfterEach
+    @AfterAll
+    public static void tearDown() throws IOException {
+        screenshot();
+    }
+
+    @Attachment(type = "image/png")
+    public static byte[] screenshot() throws IOException {
+        File screenshot = Screenshots.getLastScreenshot();
+        return screenshot == null ? null : Files.toByteArray(screenshot);
+    }
 
 }
