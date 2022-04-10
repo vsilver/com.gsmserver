@@ -1,15 +1,17 @@
 package com.gsmserver;
 
-import com.codeborne.selenide.Configuration;
 import com.codeborne.selenide.Screenshots;
 import com.codeborne.selenide.Selectors;
+import com.codeborne.selenide.Selenide;
 import com.codeborne.selenide.SelenideElement;
+import com.codeborne.selenide.junit5.SoftAssertsExtension;
 import com.codeborne.selenide.junit5.TextReportExtension;
-import com.codeborne.selenide.logevents.SelenideLogger;
 import com.google.common.io.Files;
 import io.qameta.allure.Attachment;
-import io.qameta.allure.selenide.AllureSelenide;
-import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.api.extension.RegisterExtension;
 
@@ -21,22 +23,28 @@ import static com.codeborne.selenide.Condition.text;
 import static com.codeborne.selenide.Selenide.*;
 
 
-@ExtendWith({TextReportExtension.class})
-public class SearchTests {
+@ExtendWith({TextReportExtension.class, SoftAssertsExtension.class})
+public class SearchTests extends BaseTest {
 
     @RegisterExtension
     TextReportExtension textReportExtension = new TextReportExtension();
 
-    @BeforeAll
-    public static void setUpAll() {
-        Configuration.browserSize = "1280x800";
-        SelenideLogger.addListener("AllureSelenide", new AllureSelenide().screenshots(true).savePageSource(true));
+    @AfterAll
+    public static void tearDown() throws IOException {
+        screenshot();
     }
 
+    @Attachment(type = "image/png")
+    public static byte[] screenshot() throws IOException {
+        File screenshot = Screenshots.getLastScreenshot();
+        return screenshot == null ? null : Files.toByteArray(screenshot);
+    }
 
     @BeforeEach
     void openHomePage() {
-        open("https://gsmserver.com/");
+        open("/");
+        Selenide.clearBrowserCookies();
+        Selenide.clearBrowserLocalStorage();
     }
 
     @Test
@@ -74,17 +82,6 @@ public class SearchTests {
 
     private SelenideElement findProductID(String productID) {
         return $(Selectors.by("key", productID));
-    }
-
-    @AfterAll
-    public static void tearDown() throws IOException {
-        screenshot();
-    }
-
-    @Attachment(type = "image/png")
-    public static byte[] screenshot() throws IOException {
-        File screenshot = Screenshots.getLastScreenshot();
-        return screenshot == null ? null : Files.toByteArray(screenshot);
     }
 
 }
