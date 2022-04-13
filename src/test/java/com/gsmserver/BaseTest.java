@@ -8,15 +8,15 @@ import io.qameta.allure.selenide.AllureSelenide;
 public abstract class BaseTest {
 
     static {
-        Configuration.baseUrl = "https://gsmserver.com/";
+        Configuration.baseUrl = "https://gsmserver.com";
         Configuration.browser = "chrome";
         Configuration.browserVersion = "100";
         Configuration.browserSize = "1280x800";
         Configuration.assertionMode = AssertionMode.STRICT;
         Configuration.fastSetValue = true;
         Configuration.driverManagerEnabled = true;
-        Configuration.pageLoadStrategy = "eager";
-        Configuration.reportsUrl  = "https://gsmserver.com/";
+        Configuration.pageLoadStrategy = "normal";
+        Configuration.reportsUrl  = "https://gsmserver.com";
         Configuration.timeout = 4000;
         Configuration.pollingInterval = 100;
         //Configuration.screenshots = false;

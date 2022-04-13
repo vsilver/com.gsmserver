@@ -23,7 +23,7 @@ import static com.codeborne.selenide.Condition.text;
 import static com.codeborne.selenide.Selenide.*;
 
 
-@ExtendWith({TextReportExtension.class, SoftAssertsExtension.class})
+@ExtendWith({TextReportExtension.class}) //SoftAssertsExtension.class
 public class SearchTests extends BaseTest {
 
     @RegisterExtension
@@ -55,12 +55,13 @@ public class SearchTests extends BaseTest {
         var buttonText = "Cart";
         var productID = "870605";
 
-        $("[name='searchword']").val("Z3X Box Pro Samsung Activated Golden Edition without Cable Set").pressEnter();
+        $("[name='searchword']").val(productName).pressEnter();
         $(".col-12").shouldHave(text(productName));
 
         findProductID(productID).$(".pr-t_view").shouldHave(text(productName)).click();
         findProductID(productID).$(".btn--add-to-cart").click();
-        $x("//div[@class='col-md-1 d-md-flex justify-content-md-center']").click();
+        //$x("//div[@class='col-md-1 d-md-flex justify-content-md-center']").click();
+        $(".col-md-1.d-md-flex.justify-content-md-center").click();
 
         $(".page_cart_container").shouldHave(text(buttonText));
         $$(".pdt_row").shouldHave(size(1));
@@ -73,10 +74,18 @@ public class SearchTests extends BaseTest {
         var productName = "Z3X Box Pro Samsung Activated Golden Edition without Cable Set";
 
         new HomePage().searchFor(productName);
-        var actualSearchResultTitle = new SearchResultPage().getSearchResultTitle();
-        String actualSearchResultTitleCut = actualSearchResultTitle.substring(8, 70);
 
+        var searchResultPage = new SearchResultPage();
+
+        var actualSearchResultTitle = searchResultPage.getSearchResultTitle();
+        String actualSearchResultTitleCut = actualSearchResultTitle.substring(8, 70);
         Assertions.assertEquals(productName, actualSearchResultTitleCut);
+
+        var actualSizeOfSearchResult = searchResultPage.getSearchResultListSize();
+        Assertions.assertEquals(actualSizeOfSearchResult, 3);
+
+        var actualFirstProductTitle = searchResultPage.getFirstProductInfoTitle();
+        Assertions.assertEquals(productName, actualFirstProductTitle);
 
     }
 
