@@ -1,5 +1,6 @@
 package com.gsmserver;
 
+import com.codeborne.selenide.Selenide;
 import io.qameta.allure.Step;
 import org.openqa.selenium.By;
 
@@ -15,6 +16,7 @@ public class SearchResultPage {
     }
 
     public String getFirstProductInfoTitle() {
+        //Selenide.executeJavaScript() для работы с таблицей
         return $(productListItem).$("[title='Z3X Box Pro Samsung Activated Golden Edition without Cable Set']").getText();
     }
 

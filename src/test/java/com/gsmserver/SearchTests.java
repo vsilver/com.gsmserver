@@ -14,6 +14,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.api.extension.RegisterExtension;
+import com.gsmserver.ProductBlock;
 
 import java.io.File;
 import java.io.IOException;
@@ -55,17 +56,19 @@ public class SearchTests extends BaseTest {
         var buttonText = "Cart";
         var productID = "870605";
 
+        ProductBlock productBlock = new ProductBlock();
+
         $("[name='searchword']").val(productName).pressEnter();
         $(".col-12").shouldHave(text(productName));
 
-        findProductID(productID).$(".pr-t_view").shouldHave(text(productName)).click();
-        findProductID(productID).$(".btn--add-to-cart").click();
+        productBlock.findProductID(productID).$(".pr-t_view").shouldHave(text(productName)).click();
+        productBlock.findProductID(productID).$(".btn--add-to-cart").click();
         //$x("//div[@class='col-md-1 d-md-flex justify-content-md-center']").click();
         $(".col-md-1.d-md-flex.justify-content-md-center").click();
 
         $(".page_cart_container").shouldHave(text(buttonText));
         $$(".pdt_row").shouldHave(size(1));
-        findProductID(productID).$(".pr-tiny_title").shouldHave(text(productName));
+        productBlock.findProductID(productID).$(".pr-tiny_title").shouldHave(text(productName));
     }
 
     @Test
@@ -87,10 +90,6 @@ public class SearchTests extends BaseTest {
         var actualFirstProductTitle = searchResultPage.getFirstProductInfoTitle();
         Assertions.assertEquals(productName, actualFirstProductTitle);
 
-    }
-
-    private SelenideElement findProductID(String productID) {
-        return $(Selectors.by("key", productID));
     }
 
 }
