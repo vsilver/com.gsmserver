@@ -1,4 +1,4 @@
-package com.gsmserver;
+package com.gsmserver.pages;
 
 import io.qameta.allure.Step;
 import org.openqa.selenium.By;

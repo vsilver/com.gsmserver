@@ -1,12 +1,12 @@
 package com.gsmserver;
 
 import com.codeborne.selenide.Screenshots;
-import com.codeborne.selenide.Selectors;
 import com.codeborne.selenide.Selenide;
-import com.codeborne.selenide.SelenideElement;
-import com.codeborne.selenide.junit5.SoftAssertsExtension;
 import com.codeborne.selenide.junit5.TextReportExtension;
 import com.google.common.io.Files;
+import com.gsmserver.pages.HomePage;
+import com.gsmserver.product.ProductComponent;
+import com.gsmserver.pages.SearchResultPage;
 import io.qameta.allure.Attachment;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.Assertions;
@@ -14,7 +14,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.api.extension.RegisterExtension;
-import com.gsmserver.ProductBlock;
 
 import java.io.File;
 import java.io.IOException;
@@ -56,19 +55,19 @@ public class SearchTests extends BaseTest {
         var buttonText = "Cart";
         var productID = "870605";
 
-        ProductBlock productBlock = new ProductBlock();
+        ProductComponent productComponent = new ProductComponent();
 
         $("[name='searchword']").val(productName).pressEnter();
         $(".col-12").shouldHave(text(productName));
 
-        productBlock.findProductID(productID).$(".pr-t_view").shouldHave(text(productName)).click();
-        productBlock.findProductID(productID).$(".btn--add-to-cart").click();
+        productComponent.findProductID(productID).$(".pr-t_view").shouldHave(text(productName)).click();
+        productComponent.findProductID(productID).$(".btn--add-to-cart").click();
         //$x("//div[@class='col-md-1 d-md-flex justify-content-md-center']").click();
         $(".col-md-1.d-md-flex.justify-content-md-center").click();
 
         $(".page_cart_container").shouldHave(text(buttonText));
         $$(".pdt_row").shouldHave(size(1));
-        productBlock.findProductID(productID).$(".pr-tiny_title").shouldHave(text(productName));
+        productComponent.findProductID(productID).$(".pr-tiny_title").shouldHave(text(productName));
     }
 
     @Test

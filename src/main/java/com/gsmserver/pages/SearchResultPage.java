@@ -1,4 +1,4 @@
-package com.gsmserver;
+package com.gsmserver.pages;
 
 import com.codeborne.selenide.Selenide;
 import io.qameta.allure.Step;
